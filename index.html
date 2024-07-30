@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Pelota</title>
+    <h1 style="position: fixed;  top: 0;"  >Juego de la pelota</h1>
+
+    <p style="text-align: left; position: relative; margin-left: 50px; padding: 20px;">
+       
+        Instrucciones
+        <br>
+        <br>
+        * Precionar una tecla de direccion 
+        (Izquierda, derecha, arriba o abajo)para 
+        iniciar el juego.
+        <br>
+
+        * Utiliza las teclas de dirrecion para 
+        indicar la posicision de la pelota.
+         <br>
+        * Tecla Enter para parar la pelota.    
+    </p>
+     
+
+    <style>
+
+    
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #gameArea {
+            width: 400px;
+            height: 400px;
+            background-color: #333;
+            position: relative;
+            overflow: hidden;
+        }
+        #ball {
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameArea">
+        <div id="ball"></div>
+    </div>
+
+    <script>
+        // Obtener el área del juego y la pelota
+        const gameArea = document.getElementById('gameArea');
+        const ball = document.getElementById('ball');
+
+        // Tamaños del área del juego y de la pelota
+        const gameAreaWidth = gameArea.clientWidth;
+        const gameAreaHeight = gameArea.clientHeight;
+        const ballSize = ball.clientWidth;
+
+        // Posición y velocidad inicial de la pelota
+        let ballX = 0;
+        let ballY = 0;
+        let velocityX = 0;
+        let velocityY = 0;
+        const speed = 4; // Velocidad de movimiento de la pelota
+        let isMoving = false; // Controla si la pelota está en movimiento
+
+        // Mover la pelota a una posición específica
+        function moveBall(x, y) {
+            ball.style.left = `${x}px`;
+            ball.style.top = `${y}px`;
+        }
+
+        // Actualizar la posición de la pelota y detectar rebotes
+        function updateBallPosition() {
+            if (!isMoving) return; // Si la pelota no está en movimiento, no actualices la posición
+
+            // Actualizar posición
+            ballX += velocityX;
+            ballY += velocityY;
+
+            // Rebote en los bordes
+            if (ballX <= 0 || ballX >= gameAreaWidth - ballSize) {
+                velocityX = -velocityX;
+            }
+            if (ballY <= 0 || ballY >= gameAreaHeight - ballSize) {
+                velocityY = -velocityY;
+            }
+
+            // Mover la pelota a la nueva posición
+            moveBall(ballX, ballY);
+        }
+
+        // Controlar la dirección de la pelota con las teclas
+        document.addEventListener('keydown', function(event) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    velocityX = 0;
+                    velocityY = -speed;
+                    isMoving = true;
+                    break;
+                case 'ArrowDown':
+                    velocityX = 0;
+                    velocityY = speed;
+                    isMoving = true;
+                    break;
+                case 'ArrowLeft':
+                    velocityX = -speed;
+                    velocityY = 0;
+                    isMoving = true;
+                    break;
+                case 'ArrowRight':
+                    velocityX = speed;
+                    velocityY = 0;
+                    isMoving = true;
+                    break;
+                case 'Enter':
+                    isMoving = false; // Detener la pelota
+                    velocityX = 0;
+                    velocityY = 0;
+                    break;
+            }
+        });
+
+        // Iniciar la posición inicial de la pelota
+        moveBall(ballX, ballY);
+
+        // Actualizar la posición de la pelota en un intervalo
+        setInterval(updateBallPosition, 20);
+    </script>
+</body>
+</html>
